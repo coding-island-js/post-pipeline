@@ -43,6 +43,12 @@ Native automations can't be created via API, so there's also a **code** version 
 
 **Talking points:** the **source is a view** (so you control exactly what's shared); target is **read-only**; **one-way** by default (two-way is a paid add-on); **refresh frequency** (auto/manual); you can sync across **workspaces/orgs** so an external partner sees only what you expose; Airtable can also sync **external** sources (Google Sheets, Salesforce, Jira). This is the JD's "sync data from another base / how data is saved from one base to another."
 
+### Heads up: native Sync needs a paid plan
+Base-to-base **Sync is gated behind Airtable's Team plan**. So instead of paying, there's an **API mirror** built that does the same thing:
+
+### API mirror (already built + run) — `scripts/sync-to-reporting.js`
+Reads `Project / Deliverables` and **upserts** the rows into the **Reporting** base (`app13DwqyXD8jA9nt`), matching on a `Source ID` field — idempotent (create / update / delete to mirror exactly). Run `node scripts/sync-to-reporting.js` to refresh; it could run on a schedule (cron / Netlify scheduled function) for a live mirror. **Interview line:** *"Native Sync is a Team-plan feature, so I replicated one-way sync with the API — read the source, upsert to the target keyed by source record id. Same outcome, and it shows exactly how data moves between bases."*
+
 ---
 
 ## 3) Interface (page) — "Producer dashboard"
