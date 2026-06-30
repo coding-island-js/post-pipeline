@@ -55,10 +55,8 @@ These three are **configured in the Airtable UI, not the API** (the API is for d
 
 ---
 
-## Note — creating the second base for Sync
-The target "Reporting" base must exist before step 2.3. Two options:
-- **I create it for you:** send me your **workspace id** (open Airtable, click your workspace — the URL shows `airtable.com/wspXXXXXXXX`), and I'll create `Post Pipeline — Reporting` via API.
-- **You create it:** Airtable home → **Create** → **Start from scratch** → rename it `Post Pipeline — Reporting`. (Sync builds the table for you, so it can start empty.)
+## The second base for Sync — already created ✅
+`Post Pipeline — Reporting` (id `app13DwqyXD8jA9nt`) was created via API and has a `Read me` table with the exact click-path inside it. Just open it and follow step 2.3 above to add the synced table, then delete the `Read me` table.
 
 ## How this maps to the job description
 | JD line | Built here |
