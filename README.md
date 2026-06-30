@@ -26,6 +26,8 @@ netlify deploy --prod --dir=public
 Then set `AIRTABLE_PAT`, `AIRTABLE_BASE_ID`, `AIRTABLE_TABLE_NAME` in **Site settings → Environment variables**.
 
 ## Docs
-- [docs/AIRTABLE-BASE.md](docs/AIRTABLE-BASE.md) — base schema + Airtable stretch features (sync, automations, interfaces).
+- [docs/AIRTABLE-BASE.md](docs/AIRTABLE-BASE.md) — base schema + how to talk to the Airtable API.
+- [docs/AIRTABLE-EXTENSIONS.md](docs/AIRTABLE-EXTENSIONS.md) — click-by-click runbooks for an **Automation**, a cross-base **Sync**, and an **Interface** page (the JD's checklist).
+- [docs/POST-PRODUCTION-101.md](docs/POST-PRODUCTION-101.md) — domain crib sheet so you can talk post fluently.
 - [docs/INTERVIEW-MAP.md](docs/INTERVIEW-MAP.md) — how each feature maps to the job description + a 60-sec demo script.
 - [REQUIREMENTS.md](REQUIREMENTS.md) — PO-style user stories, acceptance criteria, UAT checklist.
