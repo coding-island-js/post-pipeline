@@ -1,0 +1,13 @@
+# Netlify config — static frontend in /public, serverless functions in /netlify/functions
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Clean API path -> single CRUD function (method-routed inside the function)
+[[redirects]]
+  from = "/api/records"
+  to = "/.netlify/functions/records"
+  status = 200
