@@ -6,5 +6,8 @@
   "scripts": {
     "dev": "netlify dev",
     "deploy": "netlify deploy --prod --dir=public"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.9"
   }
 }

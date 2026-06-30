@@ -11,3 +11,9 @@
   from = "/api/records"
   to = "/.netlify/functions/records"
   status = 200
+
+# Airtable webhook receiver -> Telegram alerts
+[[redirects]]
+  from = "/api/webhook"
+  to = "/.netlify/functions/airtable-webhook"
+  status = 200

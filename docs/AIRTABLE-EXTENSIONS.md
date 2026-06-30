@@ -24,6 +24,12 @@ These three are **configured in the Airtable UI, not the API** (the API is for d
 
 **Talking points:** trigger types (record matches / created / updated / **scheduled** / form submitted / button click), conditions, and action library (email, Slack, create/update record, find records, **run a script** for anything custom). The script step is your escape hatch for logic Airtable can't do natively.
 
+### Code/API version (already built + live)
+Native automations can't be created via API, so there's also a **code** version that does the same job with zero clicks — good "I can integrate systems" proof:
+- **Airtable webhook** (`id ach8KHBPEjnpKjKgQ`) watches the **Status** field on Deliverables.
+- On change it pings **`/api/webhook`** → `netlify/functions/airtable-webhook.js`, which reads the change payload, re-fetches the record, and if Status is **Blocked/QC Fail** sends a **Telegram** alert. Payload cursor is persisted in **Netlify Blobs** so nothing double-sends.
+- **Note:** Airtable webhooks expire after **7 days** (this one ~2026-07-07). Refresh via `POST /v0/bases/{baseId}/webhooks/{id}/refresh`, or recreate. Talk to this when asked about API integrations vs native automations.
+
 ---
 
 ## 2) Sync — "Read-only reporting copy in a second base"
