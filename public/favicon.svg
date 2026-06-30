@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Post Pipeline">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f6c71"/>
+      <stop offset="1" stop-color="#0f2d31"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+  <!-- rising stages: editorial -> ... -> delivery -->
+  <rect x="13"   y="34" width="9" height="16" rx="3" fill="#ffffff" fill-opacity="0.55"/>
+  <rect x="27.5" y="26" width="9" height="24" rx="3" fill="#ffffff" fill-opacity="0.80"/>
+  <rect x="42"   y="18" width="9" height="32" rx="3" fill="#ffffff"/>
+  <!-- delivered cap on the final stage -->
+  <rect x="42"   y="18" width="9" height="10" rx="3" fill="#46d29b"/>
+</svg>

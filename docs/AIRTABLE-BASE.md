@@ -1,40 +1,39 @@
-# Airtable base setup — "Post Pipeline"
+# Airtable base — "Post Pipeline"
 
-Build this in the Airtable UI (~10 min). Doing it by hand *is* the interview-relevant practice.
+The base + schema were created via the Airtable API (`scripts/setup-airtable.js`).
+Base id lives in `.env` as `AIRTABLE_BASE_ID`. This doc is the reference + how to talk to it.
 
-## 1. Create the base
-- New base → name it **Post Pipeline**.
-- Workspace: any. Copy the **Base ID** from the URL (`airtable.com/appXXXXXXXXXXXXXX/...`) → it starts with `app`.
-- Paste it into `.env` as `AIRTABLE_BASE_ID=` and into Netlify env vars later.
+## Table: `Deliverables`
+A row = one **deliverable** for an episode (not the whole episode — an episode has many).
 
-## 2. Table: `Deliverables`
-Rename the default `Table 1` to **Deliverables**. Create these fields (exact names — the app maps to them):
-
-| Field | Type | Options |
+| Field | Type | Notes |
 |---|---|---|
-| **Title** | Single line text | primary field |
-| **Show** | Single line text | |
-| **Stage** | Single select | Editorial, VFX, Color, Mix, QC, Delivery |
-| **Status** | Single select | Not Started, In Progress, Blocked, Done |
-| **Priority** | Single select | Low, Medium, High |
-| **Due** | Date | ISO/US format, no time |
-| **Assignee** | Single line text | |
-| **Notes** | Long text | |
+| **Title** | Single line text (primary) | e.g. "S1 E04 — Final Mix" |
+| **Show** | Single line text | series name |
+| **Episode** | Single line text | e.g. "S1 E04" |
+| **Type** | Single select | Picture Master · VFX Shots · Sound Mix · M&E Stems · Captions (SDH) · Subtitles · Textless · QC Report · Key Art |
+| **Stage** | Single select | Editorial · VFX · Color · Sound · Delivery (the board's columns, in order). The field also retains Conform & QC options, but the app keeps the board to 5 columns and tracks QC as a *status* — a common real-world pattern. |
+| **Status** | Single select | Not Started · In Progress · In Review · Blocked · QC Fail · Approved · Delivered |
+| **Priority** | Single select | Low · Medium · High |
+| **Facility** | Single line text | vendor/house doing the work (Company 3, Formosa, ILP…) |
+| **Assignee** | Single line text | internal owner |
+| **Spec** | Single line text | delivery spec — IMF, 5.1+Atmos, EN-SDH .scc, EXR 16-bit… |
+| **Due** | Date (ISO) | when the deliverable is due |
+| **Air Date** | Date (ISO) | when the episode streams (the hard deadline) |
+| **Notes** | Long text | free notes |
 
-> The function uses `typecast: true`, so select options auto-create if a value is new — but set them up so colors/order look right.
+> The app's single-select option lists (in `public/app.js`) must match the Stage/Status/Type
+> names above. Writes use `typecast: true`, so a new option string is created on the fly if needed.
 
-## 3. Seed a few rows
-Add 4–5 rows across different stages so the board looks alive (e.g. "Ep 104 — Final Mix" / Midnight Harbor / Mix / In Progress / High).
+## Re-running the setup script
+```
+node scripts/setup-airtable.js <baseId>           # ensure schema + seed if empty
+node scripts/setup-airtable.js <baseId> --reset   # wipe rows + reseed sample data
+node scripts/setup-airtable.js wspXXXXXXXX         # create a brand-new base in a workspace
+```
 
-## 4. PAT scopes
-The personal access token must have: `data.records:read`, `data.records:write`, and access to **this base**. Check at airtable.com/create/tokens if calls 403.
-
----
-
-## Stretch (great interview talking points — optional to actually build)
-These mirror what the JD asked about. You can build or just be ready to *describe*:
-
-- **Linked records / second table:** add a `Shows` table; change `Show` to a *Link to another record* field. Talk to how data connects across tables.
-- **Interface (page):** Interfaces tab → build a "Producer View" with a Kanban grouped by Stage and a filtered "Blocked items" gallery. This is the "interfaces (pages)" the JD names.
-- **Automation:** when `Status` = Blocked → send Slack/email to Assignee. Or when `Stage` = Delivery → set a `Delivered` checkbox + timestamp. This is "how Automation within AT works."
-- **Cross-base sync:** create a second base, **sync** the Deliverables table into it (Airtable Sync), and explain one-way sync, sync source, and when you'd use it ("syncing data from another base," "how data is saved from one base to another").
+## Stretch features (build OR be ready to describe — these mirror the JD)
+- **Linked records:** split `Show` into a `Shows` table and link it; add an `Episodes` table linked to Deliverables. Talk to how records connect across tables.
+- **Interface (page):** Interfaces tab → a "Producer View" Kanban grouped by Stage + a filtered "Needs attention" list (Blocked / QC Fail). This is the JD's "interfaces (pages)."
+- **Automation:** Status → Blocked or QC Fail ⇒ notify the Assignee (Slack/email). Or Stage → Delivery ⇒ tick a `Delivered` box + timestamp. This is "how Automation within AT works."
+- **Cross-base sync:** sync the `Deliverables` table (a filtered view) into a separate **Reporting** base so execs see read-only status without edit access. This is "sync data from another base / how data is saved from one base to another."

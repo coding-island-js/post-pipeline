@@ -3,39 +3,119 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Post Pipeline — Post-Production Workflow Tracker</title>
-  <meta name="description" content="Track TV+ post-production deliverables through editorial, VFX, color, mix, QC and delivery. Netlify + Airtable." />
+  <title>Post Pipeline — Where every episode is in post-production</title>
+  <meta name="description" content="A shared tracker that shows exactly where every TV+ deliverable is in post-production — picture, sound, captions, VFX and more. Backed by Airtable; changes save instantly for the whole team." />
+  <meta name="theme-color" content="#163f44" />
+
+  <!-- Favicons -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Post Pipeline" />
+  <meta property="og:title" content="Post Pipeline — where every episode is in post-production" />
+  <meta property="og:description" content="One shared view of every TV+ deliverable as it moves from first edit to final delivery. The producer's source of truth, backed by Airtable." />
+  <meta property="og:url" content="https://post-pipeline.withmagic.ai" />
+  <meta property="og:image" content="https://post-pipeline.withmagic.ai/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Post Pipeline — a post-production delivery tracker" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Post Pipeline — where every episode is in post-production" />
+  <meta name="twitter:description" content="The producer's source of truth for TV+ post-production, backed by Airtable." />
+  <meta name="twitter:image" content="https://post-pipeline.withmagic.ai/og.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
+  <a class="skip-link" href="#board">Skip to the board</a>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow"><span class="live-dot"></span> Live from Airtable · updates save instantly</div>
       <h1>Post Pipeline</h1>
-      <p class="tag">TV+ post-production deliverables, stage by stage.</p>
+      <p class="lede">
+        One shared view of <strong>where every episode is in post-production</strong> — the picture
+        master, the Atmos mix, captions, subtitles, VFX and more — from first edit all the way to
+        delivery on the platform.
+      </p>
+      <p class="lede-sub">Think of it as the producer's source of truth that sits on top of Avid, Frame.io, Resolve and Pro&nbsp;Tools.</p>
     </div>
-    <button id="newBtn" class="btn btn-primary">+ New Deliverable</button>
   </header>
 
   <main>
     <div id="banner" class="banner" hidden></div>
-    <div id="board" class="board" aria-live="polite"></div>
+
+    <section class="stats" id="stats" aria-label="Summary at a glance"></section>
+
+    <section class="flow" aria-label="How work moves through post">
+      <h2 class="section-title">How work moves through post-production</h2>
+      <ol class="flow-steps" id="flowSteps"></ol>
+    </section>
+
+    <section class="board-wrap">
+      <div class="board-head">
+        <div>
+          <h2 class="section-title">The board</h2>
+          <p class="board-help">Each column is a stage of post. A card is one <em>deliverable</em> for an episode. <strong>Drag a card</strong> to move it to a new stage, change its status inline, or click&nbsp;✎ to edit everything.</p>
+        </div>
+        <button id="newBtn" class="btn btn-primary">+ Add deliverable</button>
+      </div>
+
+      <div class="filters" id="filters" aria-label="Filter by show"></div>
+
+      <div id="board" class="board" aria-live="polite"></div>
+    </section>
   </main>
 
-  <!-- New / edit deliverable dialog -->
+  <footer class="site-foot">
+    <div class="foot-grid">
+      <div>
+        <h3>Where this fits in a real post workflow</h3>
+        <p>Post teams already live in specialist tools — this doesn't replace them, it tracks across them so a producer can answer "where is everything?" in one glance.</p>
+        <ul class="tool-list">
+          <li><strong>Avid Media Composer</strong> — editorial / picture lock</li>
+          <li><strong>ShotGrid + Nuke</strong> — VFX shots</li>
+          <li><strong>DaVinci Resolve</strong> — color / DI</li>
+          <li><strong>Pro Tools</strong> — mix, ADR, M&amp;E stems</li>
+          <li><strong>Frame.io</strong> — review &amp; approval notes</li>
+          <li><strong>Aspera / Signiant</strong> — delivery transfers (IMF)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Under the hood</h3>
+        <p>The board is a web page on Netlify. The data lives in an <strong>Airtable</strong> base. When you change a status here, a small serverless function writes it straight to Airtable — the very same record a coordinator sees in the Airtable grid. One source of truth, two ways to look at it.</p>
+        <p class="foot-meta">Built by Raj · <a href="https://github.com/coding-island-js/post-pipeline">View the code on GitHub</a></p>
+      </div>
+    </div>
+  </footer>
+
   <dialog id="dialog">
     <form id="form" method="dialog">
-      <h2 id="formTitle">New Deliverable</h2>
+      <h2 id="formTitle">Add deliverable</h2>
+      <p class="form-sub">One item to track through post — e.g. a mix, a caption file, a VFX batch.</p>
       <input type="hidden" id="recId" />
-      <label>Title<span class="req">*</span>
-        <input id="f-Title" required placeholder="Ep 104 — Final Mix" />
-      </label>
-      <label>Show
-        <input id="f-Show" placeholder="Midnight Harbor" />
-      </label>
-      <div class="row">
+      <div class="row2">
+        <label>Title<span class="req">*</span>
+          <input id="f-Title" required placeholder="S1 E04 — Final Mix" />
+        </label>
+        <label>Deliverable type
+          <select id="f-Type"></select>
+        </label>
+      </div>
+      <div class="row2">
+        <label>Show
+          <input id="f-Show" placeholder="Midnight Harbor" />
+        </label>
+        <label>Episode
+          <input id="f-Episode" placeholder="S1 E04" />
+        </label>
+      </div>
+      <div class="row3">
         <label>Stage
           <select id="f-Stage"></select>
         </label>
@@ -46,16 +126,27 @@
           <select id="f-Priority"></select>
         </label>
       </div>
-      <div class="row">
-        <label>Due
-          <input type="date" id="f-Due" />
+      <div class="row2">
+        <label>Facility / vendor
+          <input id="f-Facility" placeholder="Company 3 · Formosa · ILP" />
         </label>
-        <label>Assignee
+        <label>Owner
           <input id="f-Assignee" placeholder="A. Rivera" />
         </label>
       </div>
+      <label>Spec
+        <input id="f-Spec" placeholder="IMF · 5.1 + Atmos · EN-SDH .scc" />
+      </label>
+      <div class="row2">
+        <label>Due date
+          <input type="date" id="f-Due" />
+        </label>
+        <label>Air date
+          <input type="date" id="f-AirDate" />
+        </label>
+      </div>
       <label>Notes
-        <textarea id="f-Notes" rows="2" placeholder="Awaiting client notes on reel 3."></textarea>
+        <textarea id="f-Notes" rows="2" placeholder="Anything the team should know"></textarea>
       </label>
       <div class="actions">
         <button type="button" id="cancelBtn" class="btn">Cancel</button>
